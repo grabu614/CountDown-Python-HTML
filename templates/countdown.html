@@ -17,6 +17,11 @@
     {% endif %}
 </head>
 <body>
-    <div id="countdown">{{ countdown if countdown > 0 else "Time's up!" }}</div>
-</body>
+    <div>
+        {% if minutes > 0 or seconds > 0 %}
+            {{ minutes }}:{{ "%02d" % seconds }}
+        {% else %}
+            Time's up!
+        {% endif %}
+    </div></body>
 </html>
