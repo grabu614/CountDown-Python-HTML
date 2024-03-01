@@ -12,16 +12,23 @@
             margin: 0;
         }
     </style>
-    {% if countdown > 0 %}
-    <meta http-equiv="refresh" content="1; URL='{{ url_for('countdown', countdown=countdown-1) }}'">
-    {% endif %}
 </head>
 <body>
-    <div>
-        {% if minutes > 0 or seconds > 0 %}
-            {{ minutes }}:{{ "%02d" % seconds }}
-        {% else %}
-            Time's up!
-        {% endif %}
-    </div></body>
+    <div id="countdown">{{ minutes }}:{{ "%02d" % seconds }}</div>
+
+    <script>
+        var countdownElement = document.getElementById('countdown');
+        var countdown = {{ minutes }} * 60 + {{ seconds }};
+        var countdownInterval = setInterval(function() {
+            countdown -= 1;
+            var minutes = Math.floor(countdown / 60);
+            var seconds = countdown % 60;
+            countdownElement.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                countdownElement.textContent = "Time's up!";
+            }
+        }, 1000);
+    </script>
+</body>
 </html>

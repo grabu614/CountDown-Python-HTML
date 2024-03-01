@@ -10,14 +10,16 @@ def home():
         countdown_seconds = int(request.form.get('countdownsegons'))
         end_time = datetime.now() + timedelta(minutes=countdown_minutes, seconds=countdown_seconds)
         return redirect(url_for('countdown', end_time=end_time.timestamp()))
-    return render_template('index.html')
+    else:
+        return render_template('index.html')
 
 @app.route('/<float:end_time>')
 def countdown(end_time):
     end_time = datetime.fromtimestamp(end_time)
-    remaining_time = end_time - datetime.now()
+    remaining_time = max(end_time - datetime.now(), timedelta(0))
     minutes = remaining_time.seconds // 60
     seconds = remaining_time.seconds % 60
-    return redirect(url_for('countdown', end_time=end_time.timestamp()))    
+    return render_template('countdown.html', minutes=minutes, seconds=seconds)
+
 if __name__ == '__main__':
     app.run(debug=True)
